@@ -13,10 +13,10 @@
 		<TextView
 			android:id="@+id/tv_title"
 			android:layout_width="match_parent"
-			android:layout_height="50dp"
+			android:layout_height="40dp"
 			android:gravity="center"
 			android:textColor="@color/colorTitleItemNormal"
-			android:textSize="16sp"
+			android:textSize="18sp"
 			/>
 
 		<View
@@ -33,6 +33,7 @@
 			android:paddingRight="@dimen/activity_horizontal_margin"
 			android:paddingTop="@dimen/activity_vertical_margin"
 			android:singleLine="false"
+			android:background="@android:color/white"
 			android:textColor="@android:color/black"
 			android:textSize="14sp"/>
 
@@ -43,13 +44,13 @@
 
 		<LinearLayout
 			android:layout_width="match_parent"
-			android:layout_height="50dp"
+			android:layout_height="40dp"
 			android:divider="@drawable/shape_divider"
 			android:orientation="horizontal"
 			android:showDividers="middle">
 
 			<Button
-				android:id="@+id/cancelButton"
+				android:id="@+id/bt_cancel"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				android:layout_weight="1"
@@ -59,7 +60,7 @@
 				/>
 
 			<Button
-				android:id="@+id/sureButton"
+				android:id="@+id/bt_sure"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				android:layout_weight="1"

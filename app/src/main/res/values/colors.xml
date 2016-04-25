@@ -5,6 +5,9 @@
 	<color name="colorAccent">#2979ff</color>
 	<color name="colorTitleItemNormal">#1E88E5</color>
 	<color name="colorSplit">#c2c2c2</color>
+	<color name="colorCurriculumSplit">#7c8aa1</color>
+	<color name="colorCurriculumHeaderBg">#64ffffff</color>
+	<color name="colorCurriculumHeaderText">#0a2040</color>
 	<color name="colorMediumTitle">#176cb7</color>
 	<color name="colorEditText">#616161</color>
 	<color name="colorButtonText">#1E88E5</color>
@@ -12,4 +15,5 @@
 	<color name="colorMainBackground">#fafafa</color>
 	<color name="colorDeleteButtonNormal">#f43b3b</color>
 	<color name="colorDeleteButtonPressed">#a91313</color>
+	<color name="colorCurriculumSelected">#78ffffff</color>
 </resources>

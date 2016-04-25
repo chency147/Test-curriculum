@@ -219,10 +219,11 @@
 		</TableLayout>
 
 		<Button
+			android:id="@+id/bt_delete"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:background="@drawable/delete_course_button_bg"
-			android:onClick="deleteCourse"
+			android:onClick="showDeleteConfirmDialog"
 			android:stateListAnimator="@null"
 			android:text="@string/str_delete_course"
 			android:textColor="@android:color/white"
