@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="colorPrimary">#f5f5f5</color>
+	<color name="colorPrimaryDark">#d1d1d1</color>
+	<color name="colorAccent">#2979ff</color>
+	<color name="colorTitleItemNormal">#1E88E5</color>
+	<color name="colorSplit">#c2c2c2</color>
+	<color name="colorMediumTitle">#176cb7</color>
+	<color name="colorEditText">#616161</color>
+	<color name="colorButtonText">#1E88E5</color>
+	<color name="colorWeekSelected">#1dc21f</color>
+	<color name="colorMainBackground">#fafafa</color>
+	<color name="colorDeleteButtonNormal">#f43b3b</color>
+	<color name="colorDeleteButtonPressed">#a91313</color>
+</resources>

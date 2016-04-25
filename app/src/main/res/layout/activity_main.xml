@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".activity.MainActivity">
+	<!-- 顶部栏 BEGIN-->
+	<RelativeLayout
+		android:id="@+id/rl_title"
+		android:layout_width="match_parent"
+		android:layout_height="50dp"
+		android:background="@color/colorPrimary">
+
+		<ImageButton
+			android:id="@+id/ib_back"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentStart="true"
+			android:layout_centerVertical="true"
+			android:layout_marginLeft="@dimen/activity_horizontal_margin"
+			android:background="@drawable/ic_arrow_back_blue_600_48dp"
+			android:onClick="back"/>
+
+		<TextView
+			android:id="@+id/tv_week"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_centerHorizontal="true"
+			android:layout_marginBottom="8dp"
+			android:layout_marginTop="8dp"
+			android:gravity="center"
+			android:text="第1周  ▾"
+			android:textColor="@color/colorTitleItemNormal"
+			android:textSize="20dp"/>
+
+		<TextView
+			android:id="@+id/tv_setting"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_alignParentEnd="true"
+			android:layout_alignParentRight="true"
+			android:layout_marginBottom="8dp"
+			android:layout_marginRight="@dimen/activity_horizontal_margin"
+			android:layout_marginTop="8dp"
+			android:gravity="center"
+			android:text="@string/str_setting"
+			android:textColor="@color/colorTitleItemNormal"
+			android:textSize="18dp"
+			/>
+	</RelativeLayout>
+	<!-- 顶部栏 END -->
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_above="@+id/divider_bottom"
+		android:layout_below="@+id/rl_title"
+		android:background="@color/colorMainBackground"
+		android:orientation="vertical"
+		>
+
+		<GridView
+			android:id="@+id/gv_date"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:listSelector="@null"
+			android:numColumns="8"></GridView>
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<RelativeLayout
+				android:id="@+id/rl_course_table"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				>
+
+				<per.rick.test_curriculum.widget.MyGridView
+					android:id="@+id/gv_curriculum"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginBottom="-1px"
+					android:layout_marginTop="-1px"
+					android:numColumns="8"
+					/>
+			</RelativeLayout>
+		</ScrollView>
+	</LinearLayout>
+
+	<View
+		android:id="@+id/divider_bottom"
+		android:layout_width="match_parent"
+		android:layout_height="1px"
+		android:layout_above="@+id/ll_bottom"
+		android:background="@color/colorSplit"
+		/>
+
+	<LinearLayout
+		android:id="@+id/ll_bottom"
+		android:layout_width="match_parent"
+		android:layout_height="55dp"
+		android:layout_alignParentBottom="true"
+		android:background="@color/colorPrimary"
+		android:divider="@drawable/shape_divider"
+		android:dividerPadding="1dp"
+		android:orientation="horizontal"
+		android:showDividers="middle">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:background="@drawable/bottom_button_bg"
+			android:gravity="center"
+			android:orientation="horizontal"
+			>
+
+			<ImageView
+				android:layout_width="30dp"
+				android:layout_height="30dp"
+				android:src="@drawable/ic_content_copy_blue_600_48dp"
+				/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/str_copy_curriculum"
+				android:textColor="@color/colorTitleItemNormal"
+				android:textSize="16sp"
+				/>
+		</LinearLayout>
+
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:background="@drawable/bottom_button_bg"
+			android:gravity="center"
+			android:onClick="startAddCourseActivity"
+			android:orientation="horizontal">
+
+
+			<ImageView
+				android:layout_width="30dp"
+				android:layout_height="30dp"
+				android:src="@drawable/ic_note_add_blue_600_48dp"
+				/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/str_add_course"
+				android:textColor="@color/colorTitleItemNormal"
+				android:textSize="16sp"
+				/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_weight="1"
+			android:background="@drawable/bottom_button_bg"
+			android:gravity="center"
+			android:orientation="horizontal">
+
+			<ImageView
+				android:layout_width="30dp"
+				android:layout_height="30dp"
+				android:src="@drawable/ic_school_blue_600_48dp"
+				/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/str_add_free_course"
+				android:textColor="@color/colorTitleItemNormal"
+				android:textSize="16sp"
+				/>
+		</LinearLayout>
+	</LinearLayout>
+</RelativeLayout>

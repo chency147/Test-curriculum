@@ -1,0 +1,27 @@
+<resources>
+	<string name="app_name">Rick-课程表</string>
+	<array name="str_week">
+		<item>周日</item>
+		<item>周一</item>
+		<item>周二</item>
+		<item>周三</item>
+		<item>周四</item>
+		<item>周五</item>
+		<item>周六</item>
+	</array>
+	<string name="str_setting">设置</string>
+	<string name="str_submit">提交</string>
+	<string name="str_copy_curriculum">复制课表</string>
+	<string name="str_add_course">添加课程</string>
+	<string name="str_add_free_course">蹭课</string>
+	<string name="str_course_info">课程信息</string>
+	<string name="str_course_name">名称</string>
+	<string name="str_course_location">教室</string>
+	<string name="str_course_teacher">教师</string>
+	<string name="str_course_interval">节数</string>
+	<string name="str_course_weeks">周数</string>
+	<string name="str_modify">修改</string>
+	<string name="str_cancel">取消</string>
+	<string name="str_sure">确认</string>
+	<string name="str_delete_course">删除课程</string>
+</resources>
