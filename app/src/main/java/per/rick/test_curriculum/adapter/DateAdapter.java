@@ -14,14 +14,22 @@ import per.rick.test_curriculum.R;
 import per.rick.test_curriculum.entity.Day;
 
 /**
+ * 日期表格适配器
  * Created by Rick on 2016/4/10.
  */
 public class DateAdapter extends BaseAdapter {
 
-	private Context context;
-	private List<Day> days;
-	private String month;
+	private Context context;// 上下文对象
+	private List<Day> days;// 日期链表对象
+	private String month;// 月数字符串对象
 
+	/**
+	 * 构造方法
+	 *
+	 * @param context 上下文对象
+	 * @param days    日期链表
+	 * @param month   月数字符串对象
+	 */
 	public DateAdapter(Context context, List<Day> days, String month) {
 		super();
 		this.context = context;
@@ -31,7 +39,7 @@ public class DateAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return 8;
+		return days.size() + 1;
 	}
 
 	@Override
@@ -56,6 +64,7 @@ public class DateAdapter extends BaseAdapter {
 		} else {
 			viewHolder = (DayViewHolder) convertView.getTag();
 		}
+		// 第一个Item显示月份信息
 		if (position == 0) {
 			viewHolder.getTv_day().setText(month);
 			viewHolder.getTv_week_day().setText("");

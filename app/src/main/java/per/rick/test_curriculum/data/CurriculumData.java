@@ -22,52 +22,69 @@ import per.rick.test_curriculum.entity.Day;
 import per.rick.test_curriculum.tool.DisplayUtil;
 
 /**
+ * 课程表数据
  * Created by Rick on 2016/4/11.
  */
 public class CurriculumData {
 	private static CurriculumData instance = null; // 单例
-	private Context context;
+	private Context context;// 上下文对象
 
-	private List<Course> courses = null;
-	private List<CurriculumItem> curriculumItems = null;
+	private List<Course> courses = null;// 课程链表
+	private List<CurriculumItem> curriculumItems = null;// 课程表中item对象链表
+	// 课程表中选中item的映射
 	private Map<Integer, CurriculumItem> selectedCurriculumItems = null;
-	private int day_course_count = 12;
-	private List<Day> days;
-	private String[] str_week;
-	private String month;
-	private int maxWeekCount = 25;
-	private int perWidth;// 单位：像素px
-	private int perHeight;// 单位：像素px
-	private int[] modified_weeks = null;
+	private int day_course_count = 12;// 每天的节数
+	private List<Day> days;// 日期链表
+	private String[] str_week;// 周数字符串数组，用以显示周几
+	private String month;// 月份字符串对象
+	private int maxWeekCount = 25;// 一学期的最大周数
+	private int perWidth;// 课程表每个Item的宽度 单位：像素px
+	private int perHeight;// 课程表每个Item的高度 单位：像素px
+	private int[] modified_weeks = null;// 修改后的课程的周数
 
-	private int tableColumnCount;
-	private int perHeight_dp = 50;
+	private int tableColumnCount;// 课程表列数
+
+	/* 课程按钮显示参数 BEGIN */
+	private int perHeight_dp = 50;/// 课程表每个Item的宽度 单位：dp
+	// 课程按钮的gravity参数
 	private int courseButtonGravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-	private int courseButtonPaddingBasic_dp = 4;
-	private int courseButtonPaddingBasic_px;
-	private int courseButtonPaddingLeft;
-	private int courseButtonPaddingTop;
-	private int courseButtonPaddingRight;
-	private int courseButtonPaddingBottom;
-	private int courseButtonMaxEms = 6;
-	private int courseButtonTextSize = 12;
-	private int courseButtonTextColor;
-	private Course courseToAdd = null;
-	private Course courseToShow = null;
-	private boolean isCourseToShowModified = false;
-	private boolean isCourseToShowDeleted = false;
+	private int courseButtonPaddingBasic_dp = 4;// 课程按钮的基础内边距 单位dp
+	private int courseButtonPaddingBasic_px;// 课程按钮的基础内边距 单位：px
+	private int courseButtonPaddingLeft;// 课程按钮左内边距
+	private int courseButtonPaddingTop;// 课程按钮上内边距
+	private int courseButtonPaddingRight;// 课程按钮右内边距
+	private int courseButtonPaddingBottom;// 课程按钮下内边距
+	private int courseButtonMaxEms = 6;// 课程按钮每行显示文字数
+	private int courseButtonTextSize = 12;// 课程按钮字体大小
+	private int courseButtonTextColor;// 课程按钮字体颜色
+	/* 课程按钮显示参数 END */
+	private Course courseToAdd = null;// 待添加的课程
+	private Course courseToShow = null;// 待显示的课程
+	private boolean isCourseToShowModified = false;// 课程是否被修改
+	private boolean isCourseToShowDeleted = false;// 课程是否被删除
 
-	private SharedPreferences preferences;
-	private SharedPreferences.Editor editor;
+	private SharedPreferences preferences;// 共享存储对象
+	private SharedPreferences.Editor editor;// 共享存储编辑对象
 
+	/**
+	 * 构造方法（私有）
+	 *
+	 * @param context 上下文对象
+	 */
 	private CurriculumData(Context context) {
 		this.context = context;
 		this.initData();
 	}
 
+	/**
+	 * 获取单例
+	 *
+	 * @param context 上下文对象
+	 * @return 课程表数据对象
+	 */
 	public static CurriculumData getInstance(Context context) { // 获取单例
 		if (instance == null) {
-			synchronized (CurriculumData.class) {
+			synchronized (CurriculumData.class) {// 保证线程安全
 				if (instance == null) {
 					instance = new CurriculumData(context);
 				}
@@ -76,6 +93,7 @@ public class CurriculumData {
 		return instance;
 	}
 
+	/* set and get methods BEGIN */
 	public List<Course> getCourses() {
 		return courses;
 	}
@@ -267,20 +285,30 @@ public class CurriculumData {
 	public void setCourseToShowDeleted(boolean courseToShowDeleted) {
 		isCourseToShowDeleted = courseToShowDeleted;
 	}
+	/* set and get methods END */
 
+	/**
+	 * 初始化课程表数据
+	 */
 	private void initData() {
+		// 初始化周数字符串数组
 		str_week = context.getResources().getStringArray(R.array.str_week);
-		tableColumnCount = str_week.length + 1;
+		tableColumnCount = str_week.length + 1;// 设置课程表列数
+		/* 计算课程表每个Item的宽度和高度 BEGIN */
 		DisplayMetrics dm = new DisplayMetrics();
-		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		WindowManager wm = (WindowManager) context.getSystemService(
+				Context.WINDOW_SERVICE);
 		wm.getDefaultDisplay().getMetrics(dm);
 		perWidth = dm.widthPixels / tableColumnCount;
 		perHeight = DisplayUtil.dip2px(context, perHeight_dp);
+		/* 计算课程表每个Item的宽度和高度 END */
+		// 初始化课程表Item链表
 		curriculumItems = new ArrayList<CurriculumItem>();
 		selectedCurriculumItems = new HashMap<Integer, CurriculumItem>();
+		/* 初始化日期链表 BEGIN */
 		days = new ArrayList<Day>();
 		Calendar cal = Calendar.getInstance();
-		cal.setFirstDayOfWeek(Calendar.SUNDAY);
+		cal.setFirstDayOfWeek(Calendar.SUNDAY);// 设置周日为每周第一天
 		int fix = 1 + (-1) * cal.get(Calendar.DAY_OF_WEEK);
 		cal.add(Calendar.DATE, fix);
 		month = (cal.get(Calendar.MONTH) + 1) + "月";
@@ -293,11 +321,14 @@ public class CurriculumData {
 			cal.add(Calendar.DATE, 1);
 			i++;
 		} while (i < str_week.length);
+		/* 初始化日期链表 END */
+		// 初始化课程表Item链表
 		for (i = 0; i < day_course_count * tableColumnCount; i++) {
 			CurriculumItem curriculumItem = new CurriculumItem();
 			curriculumItem.setInfo("");
 			curriculumItems.add(curriculumItem);
 		}
+		// 计算课程按钮内边距数据
 		courseButtonPaddingBasic_px = DisplayUtil.dip2px(context,
 				courseButtonPaddingBasic_dp);
 		courseButtonPaddingLeft = courseButtonPaddingBasic_px;
@@ -306,6 +337,9 @@ public class CurriculumData {
 		courseButtonPaddingBottom = 2 * courseButtonPaddingBasic_px;
 	}
 
+	/**
+	 * 保存课程表数据
+	 */
 	public void saveData() {
 		CourseController courseController = new CourseController(context);
 		preferences = context.getSharedPreferences("rick-curriculum", Context.MODE_PRIVATE);
@@ -314,6 +348,9 @@ public class CurriculumData {
 		editor.commit();
 	}
 
+	/**
+	 * 读取课程表数据
+	 */
 	public void getData() {
 		CourseController courseController = new CourseController(context);
 		preferences = context.getSharedPreferences("rick-curriculum", Context.MODE_PRIVATE);

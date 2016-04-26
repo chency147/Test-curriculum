@@ -51,14 +51,16 @@
 			/>
 	</RelativeLayout>
 	<!-- 顶部栏 END -->
+	<!-- 课程表背景图片 BEGIN -->
 	<ImageView
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_above="@+id/divider_bottom"
-		android:src="@drawable/curriculum_bg_image"
+		android:layout_below="@+id/rl_title"
 		android:scaleType="centerCrop"
-		android:layout_below="@+id/rl_title"/>
-
+		android:src="@drawable/curriculum_bg_image"/>
+	<!-- 课程表背景图片 END -->
+	<!-- 课程表底层布局 BEGIN -->
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
@@ -66,7 +68,7 @@
 		android:layout_below="@+id/rl_title"
 		android:orientation="vertical"
 		>
-
+		<!-- 日期表头 BEGIN -->
 		<GridView
 			android:id="@+id/gv_date"
 			android:layout_width="match_parent"
@@ -74,18 +76,18 @@
 			android:background="@android:color/transparent"
 			android:listSelector="@null"
 			android:numColumns="8"></GridView>
-
+		<!-- 日期表头 END -->
 		<ScrollView
 			android:layout_width="match_parent"
 			android:layout_height="match_parent">
-
+			<!-- 课程表相对布局 BEGIN -->
 			<RelativeLayout
 				android:id="@+id/rl_course_table"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				>
 
-				<per.rick.test_curriculum.widget.MyGridView
+				<per.rick.test_curriculum.widget.CurriculumGridView
 					android:id="@+id/gv_curriculum"
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
@@ -94,9 +96,10 @@
 					android:numColumns="8"
 					/>
 			</RelativeLayout>
+			<!-- 课程表相对布局 END -->
 		</ScrollView>
 	</LinearLayout>
-
+	<!-- 课程表底层布局 BEGIN -->
 	<View
 		android:id="@+id/divider_bottom"
 		android:layout_width="match_parent"
@@ -104,7 +107,7 @@
 		android:layout_above="@+id/ll_bottom"
 		android:background="@color/colorSplit"
 		/>
-
+	<!-- 低栏 BEGIN -->
 	<LinearLayout
 		android:id="@+id/ll_bottom"
 		android:layout_width="match_parent"
@@ -190,4 +193,5 @@
 				/>
 		</LinearLayout>
 	</LinearLayout>
+	<!-- 低栏 END -->
 </RelativeLayout>

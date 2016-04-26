@@ -1,12 +1,14 @@
 package per.rick.test_curriculum.entity;
 
 /**
+ * 日期类
  * Created by Rick on 2016/4/9.
  */
 public class Day {
-	private String day;
-	private String day_week;
+	private String day;// 日文本（显示几号）
+	private String day_week;// 周文本（显示周几）
 
+	// set and get methods
 	public String getDay() {
 		return day;
 	}

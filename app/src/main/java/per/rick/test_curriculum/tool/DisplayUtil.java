@@ -3,6 +3,7 @@ package per.rick.test_curriculum.tool;
 import android.content.Context;
 
 /**
+ * 屏幕像素单位转换工具
  * Created by Rick on 2016/4/10.
  */
 public class DisplayUtil {

@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -23,26 +22,31 @@ import per.rick.test_curriculum.entity.Course;
 import per.rick.test_curriculum.entity.CurriculumItem;
 import per.rick.test_curriculum.widget.CourseButton;
 
+/**
+ * 主界面类
+ * Created by Rick on 2016-4-26
+ */
 public class MainActivity extends AppCompatActivity {
 
-	private RelativeLayout rl_course_table;
-	private GridView gv_curriculum;
-	private GridView gv_date;
-	private CurriculumData data;
-	private CourseController courseController;
-	private List<CourseButton> courseButtons;
-	DateAdapter dateAdapter;
-	CurriculumAdapter curriculumAdapter;
+	private RelativeLayout rl_course_table;// 防止课程表的相对布局
+	private GridView gv_curriculum;// 课程表容器
+	private GridView gv_date;// 课程表上方的日期显示容器
+	private CurriculumData data;// 课程表数据
+	private CourseController courseController;// 课程操作工具
+	private List<CourseButton> courseButtons;// 保存课程按钮的链表
+	DateAdapter dateAdapter;// 日期容器适配器
+	CurriculumAdapter curriculumAdapter;// 课程表容器适配器
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		data = CurriculumData.getInstance(this);
-		data.getData();
-		courseController = new CourseController(this);
-		courseButtons = new ArrayList<CourseButton>();
+		data = CurriculumData.getInstance(this);// 获取课程表数据对象
+		data.getData();// 初始化数据
+		courseController = new CourseController(this);// 初始化课程操作工具对象
+		courseButtons = new ArrayList<CourseButton>();// 初始化课程按钮链表
 		this.initCurriculum();
+		// 配置课程表点击事件，标记或者取消标记被点击的Item
 		gv_curriculum.setOnItemClickListener(
 				new AdapterView.OnItemClickListener() {
 					@Override
@@ -54,12 +58,16 @@ public class MainActivity extends AppCompatActivity {
 						}
 					}
 				});
+		// 将课程数据以按钮的形式放置在课程表相对布局中
 		for (Course course : data.getCourses()) {
 			courseController.addCourseToTable(this, rl_course_table,
 					course, courseButtons);
 		}
 	}
 
+	/**
+	 * 初始化课程表各控件
+	 */
 	private void initCurriculum() {
 		gv_curriculum = (GridView) findViewById(R.id.gv_curriculum);
 		gv_date = (GridView) findViewById(R.id.gv_date);
@@ -70,8 +78,12 @@ public class MainActivity extends AppCompatActivity {
 		rl_course_table = (RelativeLayout) findViewById(R.id.rl_course_table);
 	}
 
+	/**
+	 * 课程表点击事件
+	 */
 	private void doSelectCurriculum(int position) {
 		CurriculumItem item;
+		// 如果选中节已经被选中，且上下节都没有被选中，那么取消该节的选中
 		if (data.getSelectedCurriculumItems().containsKey(position)) {
 			if (!data.getSelectedCurriculumItems()
 					.containsKey(position - data.getTableColumnCount())
@@ -83,12 +95,14 @@ public class MainActivity extends AppCompatActivity {
 				return;
 			}
 		}
+		// 如果目前没有任何节被选中，那么选中当前节
 		if (data.getSelectedCurriculumItems().isEmpty()) {
 			item = data.getCurriculumItems().get(position);
 			item.setSelected(true);
 			data.getSelectedCurriculumItems().put(position, item);
 			return;
 		}
+		// 如果当前点击的节的上节或者下节有选中，那么选中该节
 		if (data.getSelectedCurriculumItems()
 				.containsKey(position - data.getTableColumnCount())
 				|| data.getSelectedCurriculumItems()
@@ -99,7 +113,11 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
+	/**
+	 * 开启添加课程的Activity
+	 */
 	public void startAddCourseActivity(View view) {
+		// 如果有节选中那么就开启目标Activity
 		if (data.getSelectedCurriculumItems().size() != 0) {
 			ComponentName comp = new ComponentName(this, AddCourseActivity.class);
 			Intent intent = new Intent();
@@ -112,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 	protected void onResume() {
 		super.onResume();
 		boolean needSave = false;
+		// 判断并加入课程
 		if (data.getCourseToAdd() != null) {
 			data.getCourses().add(data.getCourseToAdd());
 			courseController.addCourseToTable(this, rl_course_table,
@@ -126,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
 			data.setCourseToAdd(null);
 			needSave = true;
 		}
+		// 判断并修改课程
 		if (data.isCourseToShowModified()) {
 			data.getCourseToShow().getCourseButton().setVisibility(View.INVISIBLE);
 			rl_course_table.removeView(data.getCourseToShow().getCourseButton());
@@ -136,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
 			data.setCourseToShowModified(false);
 			needSave = true;
 		}
+		// 判断并删除课程
 		if (data.isCourseToShowDeleted()) {
 			data.getCourseToShow().getCourseButton().setVisibility(View.INVISIBLE);
 			rl_course_table.removeView(data.getCourseToShow().getCourseButton());
@@ -145,12 +166,16 @@ public class MainActivity extends AppCompatActivity {
 			data.setCourseToShowDeleted(false);
 			needSave = true;
 		}
+		// 重新保存课程信息
 		if (needSave) {
 			data.saveData();
 			curriculumAdapter.notifyDataSetChanged();
 		}
 	}
 
+	/**
+	 * 返回
+	 */
 	public void back(View view) {
 		onBackPressed();
 	}

@@ -9,12 +9,14 @@ import android.widget.Button;
 import per.rick.test_curriculum.entity.Course;
 
 /**
+ * 课程按钮
  * Created by Rick on 2016/4/11.
  */
 public class CourseButton extends Button {
 
-	private Course course;
+	private Course course;// 对应的课程
 
+	// set and get methods
 	public CourseButton(Context context) {
 		super(context);
 	}

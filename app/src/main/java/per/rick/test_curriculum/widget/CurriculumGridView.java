@@ -7,24 +7,25 @@ import android.util.AttributeSet;
 import android.widget.GridView;
 
 /**
+ * 课程表表格视图
  * Created by Rick on 2016/4/10.
  */
-public class MyGridView extends GridView{
+public class CurriculumGridView extends GridView {
 
-	public MyGridView(Context context) {
+	public CurriculumGridView(Context context) {
 		super(context);
 	}
 
-	public MyGridView(Context context, AttributeSet attrs) {
+	public CurriculumGridView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
-	public MyGridView(Context context, AttributeSet attrs, int defStyleAttr) {
+	public CurriculumGridView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 	}
 
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	public MyGridView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+	public CurriculumGridView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
 	}
 

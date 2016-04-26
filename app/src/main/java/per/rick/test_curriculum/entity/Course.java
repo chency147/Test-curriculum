@@ -5,18 +5,20 @@ import java.util.Arrays;
 import per.rick.test_curriculum.widget.CourseButton;
 
 /**
+ * 课程类
  * Created by Rick on 2016/4/9.
  */
 public class Course implements Cloneable {
-	private String name;
-	private String location;
-	private String teacher;
-	private int dayWeek;
-	private int beginInterval;
-	private int endInterval;
-	private int[] weeks = null;
-	private CourseButton courseButton = null;
+	private String name;// 课程名称
+	private String location;// 上课位置
+	private String teacher;// 教师
+	private int dayWeek;// 周几上课
+	private int beginInterval;// 开始上课节数
+	private int endInterval;// 结束节数
+	private int[] weeks = null;// 上课周数
+	private CourseButton courseButton = null;// 对应的课程按钮
 
+	// set and get methods
 	public String getName() {
 		return name;
 	}

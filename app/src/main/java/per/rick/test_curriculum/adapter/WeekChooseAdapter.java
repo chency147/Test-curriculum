@@ -15,12 +15,19 @@ import per.rick.test_curriculum.adapter.holder.WeekViewHolder;
 import per.rick.test_curriculum.entity.Week;
 
 /**
+ * 周数选择表格适配器
  * Created by Rick on 2016/4/15.
  */
 public class WeekChooseAdapter extends BaseAdapter {
-	private List<Week> weeks;
-	private Context context;
+	private List<Week> weeks;// 周数链表
+	private Context context;// 上下文对象
 
+	/**
+	 * 构造方法
+	 *
+	 * @param context 上下文对象
+	 * @param weeks   周数链表
+	 */
 	public WeekChooseAdapter(Context context, List<Week> weeks) {
 		super();
 		this.context = context;
@@ -58,6 +65,7 @@ public class WeekChooseAdapter extends BaseAdapter {
 		}
 		viewHolder.getTv_week_num().setText(String.valueOf(
 				weeks.get(index).getNum()));
+		// 根据周数是否被选择而使用不同的样式
 		if (weeks.get(index).isSelected()) {
 			viewHolder.getTv_week_num().setTextColor(Color.WHITE);
 			convertView.setBackgroundResource(R.color.colorWeekSelected);
