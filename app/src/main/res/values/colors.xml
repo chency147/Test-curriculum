@@ -16,4 +16,26 @@
 	<color name="colorDeleteButtonNormal">#f43b3b</color>
 	<color name="colorDeleteButtonPressed">#a91313</color>
 	<color name="colorCurriculumSelected">#78ffffff</color>
+	<color name="colorCourseButtonGrayNormal">#c8939393</color>
+	<color name="colorCourseButtonGrayPressed">#c82e2e2e</color>
+	<array name="colorsForCourseButtonNormal">
+		<item>#b2ff0000</item>
+		<item>#c8ff00d5</item>
+		<item>#c80800ff</item>
+		<item>#c80abe00</item>
+		<item>#c800a2ff</item>
+		<item>#c8d25f01</item>
+		<item>#c89b9000</item>
+		<item>#c800b6b6</item>
+	</array>
+	<array name="colorsForCourseButtonPressed">
+		<item>#c88b0000</item>
+		<item>#c893007a</item>
+		<item>#c8050094</item>
+		<item>#c8067800</item>
+		<item>#c8005484</item>
+		<item>#c8873d00</item>
+		<item>#c8464100</item>
+		<item>#c8006b6b</item>
+	</array>
 </resources>

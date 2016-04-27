@@ -11,8 +11,10 @@ import per.rick.test_curriculum.R;
 import per.rick.test_curriculum.data.CurriculumData;
 import per.rick.test_curriculum.entity.Course;
 import per.rick.test_curriculum.listener.ConfirmDialogListener;
+import per.rick.test_curriculum.listener.IntervalChooseListener;
 import per.rick.test_curriculum.listener.WeeksChooseListener;
 import per.rick.test_curriculum.widget.ConfirmDialog;
+import per.rick.test_curriculum.widget.IntervalChooseDialog;
 import per.rick.test_curriculum.widget.WeeksChooseDialog;
 
 /**
@@ -33,6 +35,7 @@ public class CourseInfoActivity extends AppCompatActivity {
 	private Button bt_delete;// 删除课程按钮
 	private WeeksChooseListener weeksChooseListener;// 周数选择监听器
 	private ConfirmDialogListener confirmDialogListener;// 确认框监听器
+	private IntervalChooseListener intervalChooseListener;// 节数选择监听器
 	private Course courseTemp;// 临时课程对象
 
 	private int state = 0; //0查看课程信息，1修改课程信息
@@ -48,6 +51,7 @@ public class CourseInfoActivity extends AppCompatActivity {
 		initViews();
 		setWeeksChooseListener();
 		setConfirmDialogListener();
+		setIntervalChooseListener();
 		showInfo();
 	}
 
@@ -74,7 +78,7 @@ public class CourseInfoActivity extends AppCompatActivity {
 		et_course_name.setText(course.getName());
 		et_course_location.setText(course.getLocation());
 		et_course_teacher.setText(course.getTeacher());
-		et_course_interval.setText(course.getIntervalString());
+		et_course_interval.setText(course.getIntervalStringToShow());
 		et_course_weeks.setText(course.getWeeksString());
 	}
 
@@ -90,7 +94,6 @@ public class CourseInfoActivity extends AppCompatActivity {
 			et_course_name.setFocusableInTouchMode(true);
 			et_course_location.setFocusableInTouchMode(true);
 			et_course_teacher.setFocusableInTouchMode(true);
-			et_course_interval.setFocusableInTouchMode(true);
 			bt_delete.setVisibility(View.INVISIBLE);// 隐藏删除按钮
 			state = 1;
 		} else { //当前状态为修改信息状态，则确认修改
@@ -100,8 +103,14 @@ public class CourseInfoActivity extends AppCompatActivity {
 					.toString());
 			data.getCourseToShow().setTeacher(et_course_teacher.getText()
 					.toString());
+			data.getCourseToShow().setDayWeek(
+					courseTemp.getDayWeek());
+			data.getCourseToShow().setBeginInterval(
+					courseTemp.getBeginInterval());
+			data.getCourseToShow().setEndInterval(
+					courseTemp.getEndInterval());
 			if (courseTemp.getWeeks() != null) {
-				data.getCourseToShow().setWeeks(courseTemp.getWeeks());
+				data.getCourseToShow().setWeeks(courseTemp.getWeeks(), true);
 			}
 			// tv_title.setText(et_course_name.getText().toString());
 			// tv_modify.setText("修改");
@@ -129,6 +138,18 @@ public class CourseInfoActivity extends AppCompatActivity {
 	}
 
 	/**
+	 * 调出节数选择对话框
+	 */
+	public void chooseIntervals(View view) {
+		if (state == 1) {
+			IntervalChooseDialog.Builder builder =
+					new IntervalChooseDialog.Builder(this, courseTemp);
+			builder.setIntervalChooseListener(intervalChooseListener);
+			builder.create().show();
+		}
+	}
+
+	/**
 	 * 设置周数选择对话框监听器
 	 */
 	public void setWeeksChooseListener() {
@@ -139,7 +160,7 @@ public class CourseInfoActivity extends AppCompatActivity {
 				if (data.getModified_weeks() == null) {
 					return;
 				}
-				courseTemp.setWeeks(weeks);
+				courseTemp.setWeeks(weeks, true);
 				et_course_weeks.setText(
 						courseTemp.getWeeksString());
 			}
@@ -157,6 +178,23 @@ public class CourseInfoActivity extends AppCompatActivity {
 				if (isSure) {
 					deleteCourse();
 				}
+			}
+		};
+	}
+
+	/**
+	 * 设置节数选择对话框监听器
+	 */
+	public void setIntervalChooseListener() {
+		intervalChooseListener = new IntervalChooseListener() {
+			@Override
+			public void refreshActivity(
+					int dayWeek, int beginInterval, int endInterval) {
+				courseTemp.setDayWeek(dayWeek);
+				courseTemp.setBeginInterval(beginInterval);
+				courseTemp.setEndInterval(endInterval);
+				et_course_interval.setText(courseTemp
+						.getIntervalStringToShow());
 			}
 		};
 	}

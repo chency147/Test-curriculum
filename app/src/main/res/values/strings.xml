@@ -24,4 +24,6 @@
 	<string name="str_cancel">取消</string>
 	<string name="str_sure">确认</string>
 	<string name="str_delete_course">删除课程</string>
+	<string name="str_weeks_choose">周数选择</string>
+	<string name="str_interval_choose">节数选择</string>
 </resources>

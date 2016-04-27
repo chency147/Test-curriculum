@@ -2,8 +2,9 @@ package per.rick.test_curriculum.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.Button;
 
 import per.rick.test_curriculum.entity.Course;
@@ -19,6 +20,9 @@ public class CourseButton extends Button {
 	// set and get methods
 	public CourseButton(Context context) {
 		super(context);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			this.setStateListAnimator(null);
+		}
 	}
 
 	public CourseButton(Context context, AttributeSet attrs) {
@@ -41,5 +45,4 @@ public class CourseButton extends Button {
 	public void setCourse(Course course) {
 		this.course = course;
 	}
-
 }

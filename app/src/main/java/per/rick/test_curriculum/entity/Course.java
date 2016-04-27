@@ -2,6 +2,7 @@ package per.rick.test_curriculum.entity;
 
 import java.util.Arrays;
 
+import per.rick.test_curriculum.data.CurriculumData;
 import per.rick.test_curriculum.widget.CourseButton;
 
 /**
@@ -12,11 +13,13 @@ public class Course implements Cloneable {
 	private String name;// 课程名称
 	private String location;// 上课位置
 	private String teacher;// 教师
-	private int dayWeek;// 周几上课
+	private int dayWeek = 0;// 周几上课
 	private int beginInterval;// 开始上课节数
 	private int endInterval;// 结束节数
 	private int[] weeks = null;// 上课周数
+	private int weeksBinary = 0;// 上课周数（二进制版）
 	private CourseButton courseButton = null;// 对应的课程按钮
+	private CurriculumData data = null;
 
 	// set and get methods
 	public String getName() {
@@ -72,7 +75,27 @@ public class Course implements Cloneable {
 	}
 
 	public void setWeeks(int[] weeks) {
+		this.setWeeks(weeks, false);
+	}
+
+	public void setWeeks(int[] weeks, boolean isSetBinary) {
 		this.weeks = weeks;
+		if (!isSetBinary) {
+			return;
+		}
+		int i;
+		this.weeksBinary = 0;
+		for (i = 0; i < this.weeks.length; i++) {
+			weeksBinary = weeksBinary | (1 << (this.weeks[i] - 1));
+		}
+	}
+
+	public int getWeeksBinary() {
+		return weeksBinary;
+	}
+
+	public void setWeeksBinary(int weeksBinary) {
+		this.weeksBinary = weeksBinary;
 	}
 
 	public String getIntervalString() {
@@ -88,7 +111,15 @@ public class Course implements Cloneable {
 		this.courseButton = courseButton;
 	}
 
+	/**
+	 * 获得周数的文本
+	 *
+	 * @return 周数文本
+	 */
 	public String getWeeksString() {
+		if (weeks == null) {
+			return "未设置周数";
+		}
 		if (weeks.length == 1) {
 			return "第 " + weeks[0] + " 周";
 		}
@@ -112,8 +143,10 @@ public class Course implements Cloneable {
 			return "第 " + weeks[0] + "-" + weeks[div[0]] + " 周";
 		}
 		if (flag == 1) {
-			return "第 " + weeks[0] + "-" + weeks[div[0]]
-					+ " , " + weeks[div[0] + 1] + "-" + weeks[div[1]] + " 周";
+			return "第 " + weeks[0]
+					+ (div[0] == -1 ? "" : ("-" + weeks[div[0]]))
+					+ " , " + weeks[div[0] == -1 ? 1 : div[0] + 1]
+					+ (div[1] == -1 ? "" : ("-" + weeks[div[1]])) + " 周";
 		}
 		String result = "第";
 		for (i = 0; i < weeks.length; i++) {
@@ -123,6 +156,11 @@ public class Course implements Cloneable {
 		return result;
 	}
 
+	/**
+	 * 克隆
+	 *
+	 * @return 和自己一样的副本
+	 */
 	public Object clone() {
 		Object object = null;
 		try {
@@ -131,5 +169,17 @@ public class Course implements Cloneable {
 			e.printStackTrace();
 		}
 		return object;
+	}
+
+	/**
+	 * 获取用以显示用途的节数文本
+	 *
+	 * @return 节数文本
+	 */
+	public String getIntervalStringToShow() {
+		if (data == null) {
+			data = CurriculumData.getInstance();
+		}
+		return data.getStr_week()[dayWeek] + " " + this.getIntervalString();
 	}
 }

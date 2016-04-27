@@ -178,36 +178,40 @@ public class WeeksChooseDialog extends Dialog {
 		 * 设置取消和确认按钮的监听器
 		 */
 		private void setListener() {
-			cancelButtonClickListener = new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					data.setModified_weeks(null);
-					dialog.dismiss();
-				}
-			};
-			sureButtonClickListener = new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					List<Integer> weeksTemp = new ArrayList<Integer>();
-					for (Week week : weeks) {
-						if (week.isSelected()) {
-							weeksTemp.add(week.getNum());
-						}
-					}
-					// 将List转换为Array
-					int[] weeksArray;
-					if (weeksTemp.size() != 0) {
-						weeksArray = new int[weeksTemp.size()];
-						for (int i = 0; i < weeksTemp.size(); i++) {
-							weeksArray[i] = weeksTemp.get(i);
-						}
-						data.setModified_weeks(weeksArray);
-						weeksChooseListener.refreshActivity(
-								data.getModified_weeks());
+			if (cancelButtonClickListener == null) {
+				cancelButtonClickListener = new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						data.setModified_weeks(null);
 						dialog.dismiss();
 					}
-				}
-			};
+				};
+			}
+			if (sureButtonClickListener == null) {
+				sureButtonClickListener = new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						List<Integer> weeksTemp = new ArrayList<Integer>();
+						for (Week week : weeks) {
+							if (week.isSelected()) {
+								weeksTemp.add(week.getNum());
+							}
+						}
+						// 将List转换为Array
+						int[] weeksArray;
+						if (weeksTemp.size() != 0) {
+							weeksArray = new int[weeksTemp.size()];
+							for (int i = 0; i < weeksTemp.size(); i++) {
+								weeksArray[i] = weeksTemp.get(i);
+							}
+							data.setModified_weeks(weeksArray);
+							weeksChooseListener.refreshActivity(
+									data.getModified_weeks());
+							dialog.dismiss();
+						}
+					}
+				};
+			}
 		}
 	}
 }

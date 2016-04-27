@@ -10,7 +10,9 @@ import java.util.Iterator;
 import per.rick.test_curriculum.R;
 import per.rick.test_curriculum.data.CurriculumData;
 import per.rick.test_curriculum.entity.Course;
+import per.rick.test_curriculum.listener.IntervalChooseListener;
 import per.rick.test_curriculum.listener.WeeksChooseListener;
+import per.rick.test_curriculum.widget.IntervalChooseDialog;
 import per.rick.test_curriculum.widget.WeeksChooseDialog;
 
 /**
@@ -30,6 +32,7 @@ public class AddCourseActivity extends AppCompatActivity {
 	private int dayWeek;// 周几上课
 	private Course courseToAdd;// 欲添加的课程对象
 	private WeeksChooseListener weeksChooseListener;// 周数选择对话框监听器
+	private IntervalChooseListener intervalChooseListener;//节数选择对话框监听器
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class AddCourseActivity extends AppCompatActivity {
 		data = CurriculumData.getInstance(this);
 		courseToAdd = new Course();// 初始化欲添加的课程对象
 		setWeeksChooseListener();
+		setIntervalChooseListener();
 		initAddCourseInfo();
 	}
 
@@ -66,11 +70,10 @@ public class AddCourseActivity extends AppCompatActivity {
 		}
 		// 获取周几上课
 		dayWeek = position % data.getTableColumnCount() - 1;
-		et_course_interval.setText(data.getStr_week()[dayWeek]
-				+ "  第" +
-				(beginInterval == endInterval ?
-						beginInterval : (beginInterval + "-" + endInterval))
-				+ "节");
+		courseToAdd.setDayWeek(dayWeek);
+		courseToAdd.setBeginInterval(beginInterval);
+		courseToAdd.setEndInterval(endInterval);
+		et_course_interval.setText(courseToAdd.getIntervalStringToShow());
 		data.setModified_weeks(null);
 	}
 
@@ -99,6 +102,16 @@ public class AddCourseActivity extends AppCompatActivity {
 	}
 
 	/**
+	 * 调出节数选择对话框
+	 */
+	public void chooseIntervals(View view) {
+		IntervalChooseDialog.Builder builder =
+				new IntervalChooseDialog.Builder(this, courseToAdd);
+		builder.setIntervalChooseListener(intervalChooseListener);
+		builder.create().show();
+	}
+
+	/**
 	 * 设置周数选择对话框监听器
 	 */
 	public void setWeeksChooseListener() {
@@ -109,8 +122,28 @@ public class AddCourseActivity extends AppCompatActivity {
 				if (data.getModified_weeks() == null) {
 					return;
 				}
-				courseToAdd.setWeeks(weeks);
+				courseToAdd.setWeeks(weeks, true);
 				et_course_weeks.setText(courseToAdd.getWeeksString());
+			}
+		};
+	}
+
+	/**
+	 * 设置节数选择对话框监听器
+	 */
+	public void setIntervalChooseListener() {
+		intervalChooseListener = new IntervalChooseListener() {
+			@Override
+			public void refreshActivity(
+					int dayWeek, int beginInterval, int endInterval) {
+				AddCourseActivity.this.dayWeek = dayWeek;
+				AddCourseActivity.this.beginInterval = beginInterval;
+				AddCourseActivity.this.endInterval = endInterval;
+				courseToAdd.setDayWeek(dayWeek);
+				courseToAdd.setBeginInterval(beginInterval);
+				courseToAdd.setEndInterval(endInterval);
+				et_course_interval.setText(courseToAdd
+						.getIntervalStringToShow());
 			}
 		};
 	}

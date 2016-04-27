@@ -96,6 +96,7 @@ public class ConfirmDialog extends Dialog {
 
 		/**
 		 * 设置确认框监听器
+		 *
 		 * @param listener 确认框监听器
 		 * @return 确认框生成器
 		 */
@@ -107,6 +108,7 @@ public class ConfirmDialog extends Dialog {
 
 		/**
 		 * 构造确认框
+		 *
 		 * @return 对话框对象
 		 */
 		public ConfirmDialog create() {
@@ -143,25 +145,28 @@ public class ConfirmDialog extends Dialog {
 		 * 设置取消和确认按钮的监听器
 		 */
 		private void setButtonListener() {
-			cancelButtonClickListener = new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (confirmDialogListener != null) {
-						confirmDialogListener.doConfirm(false);
+			if (cancelButtonClickListener == null) {
+				cancelButtonClickListener = new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						if (confirmDialogListener != null) {
+							confirmDialogListener.doConfirm(false);
+						}
+						dialog.dismiss();
 					}
-					dialog.dismiss();
-				}
-			};
-
-			sureButtonClickListener = new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (confirmDialogListener != null) {
-						confirmDialogListener.doConfirm(true);
+				};
+			}
+			if (sureButtonClickListener == null) {
+				sureButtonClickListener = new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						if (confirmDialogListener != null) {
+							confirmDialogListener.doConfirm(true);
+						}
+						dialog.dismiss();
 					}
-					dialog.dismiss();
-				}
-			};
+				};
+			}
 		}
 	}
 }

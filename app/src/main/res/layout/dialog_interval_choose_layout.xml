@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			 android:layout_width="match_parent"
+			 android:layout_height="match_parent">
 
 	<LinearLayout
 		android:layout_width="match_parent"
@@ -17,29 +16,38 @@
 			android:layout_marginLeft="@dimen/activity_horizontal_margin"
 			android:layout_marginRight="@dimen/activity_horizontal_margin"
 			android:layout_marginTop="@dimen/activity_vertical_margin"
-			android:text="@string/str_weeks_choose"
-			android:textSize="16sp"
-			/>
+			android:text="@string/str_interval_choose"
+			android:textSize="16sp"/>
 
-		<GridView
-			android:id="@+id/gv_weeks"
+		<LinearLayout
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/activity_vertical_margin"
-			android:layout_marginLeft="@dimen/activity_horizontal_margin"
-			android:layout_marginRight="@dimen/activity_horizontal_margin"
-			android:background="@color/colorSplit"
-			android:horizontalSpacing="1px"
-			android:numColumns="5"
-			android:padding="1px"
-			android:verticalSpacing="1px"
-			></GridView>
+			android:layout_height="200dp"
+			android:layout_margin="@dimen/activity_horizontal_margin"
+			android:orientation="horizontal">
+
+			<NumberPicker
+				android:id="@+id/np_dayWeek"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"/>
+
+			<NumberPicker
+				android:id="@+id/np_beginInterval"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"/>
+
+			<NumberPicker
+				android:id="@+id/np_endInterval"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="1"/>
+		</LinearLayout>
 
 		<View
 			android:layout_width="match_parent"
 			android:layout_height="1px"
-			android:background="@color/colorSplit"
-			/>
+			android:background="@color/colorSplit"/>
 
 		<LinearLayout
 			android:layout_width="match_parent"
@@ -56,7 +64,8 @@
 				android:background="@drawable/dialog_button_bg_left"
 				android:stateListAnimator="@null"
 				android:text="@string/str_cancel"
-				android:textColor="@color/colorButtonText"/>
+				android:textColor="@color/colorButtonText"
+				/>
 
 			<Button
 				android:id="@+id/bt_sure"
@@ -66,10 +75,8 @@
 				android:background="@drawable/dialog_button_bg_right"
 				android:stateListAnimator="@null"
 				android:text="@string/str_sure"
-				android:textColor="@color/colorButtonText"/>
-
+				android:textColor="@color/colorButtonText"
+				/>
 		</LinearLayout>
-
-
 	</LinearLayout>
 </FrameLayout>

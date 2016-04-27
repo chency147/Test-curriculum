@@ -2,6 +2,9 @@ package per.rick.test_curriculum.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -27,7 +30,7 @@ import per.rick.test_curriculum.tool.DisplayUtil;
  */
 public class CurriculumData {
 	private static CurriculumData instance = null; // 单例
-	private Context context;// 上下文对象
+	private static Context context = null;// 上下文对象
 
 	private List<Course> courses = null;// 课程链表
 	private List<CurriculumItem> curriculumItems = null;// 课程表中item对象链表
@@ -36,11 +39,21 @@ public class CurriculumData {
 	private int day_course_count = 12;// 每天的节数
 	private List<Day> days;// 日期链表
 	private String[] str_week;// 周数字符串数组，用以显示周几
+	private String[] str_beginInterval;// 开始节数字符串数组
+	private String[] str_endInterval;// 开始节数字符串数组
 	private String month;// 月份字符串对象
 	private int maxWeekCount = 25;// 一学期的最大周数
 	private int perWidth;// 课程表每个Item的宽度 单位：像素px
 	private int perHeight;// 课程表每个Item的高度 单位：像素px
 	private int[] modified_weeks = null;// 修改后的课程的周数
+	private int[] courseButtonColorsNormal = null;// 课程按钮正常状态颜色
+	private int[] courseButtonColorsPressed = null;// 课程按钮按下状态颜色
+	private int courseButtonColorGrayNormal;// 非本周课程正常状态颜色
+	private int courseButtonColorGrayPressed;// 非本周课程按下状态颜色
+	private int courseButtonCorner = 0;// 课程按钮圆角半径 单位：px
+	private int courseButtonCorner_dp = 5;// 课程按钮圆角半径 单位：dp
+	private int courseButtonMargin = 0;// 课程按钮外边距 单位：px
+	private int courseButtonMargin_dp = 2;// 课程按钮外边距 单位：dp
 
 	private int tableColumnCount;// 课程表列数
 
@@ -82,7 +95,7 @@ public class CurriculumData {
 	 * @param context 上下文对象
 	 * @return 课程表数据对象
 	 */
-	public static CurriculumData getInstance(Context context) { // 获取单例
+	public static CurriculumData getInstance(Context context) {
 		if (instance == null) {
 			synchronized (CurriculumData.class) {// 保证线程安全
 				if (instance == null) {
@@ -90,6 +103,15 @@ public class CurriculumData {
 				}
 			}
 		}
+		return instance;
+	}
+
+	/**
+	 * 获取单例（无参版，只能在单例初始化之后才能调用）
+	 *
+	 * @return 课程表数据对象
+	 */
+	public static CurriculumData getInstance() {
 		return instance;
 	}
 
@@ -285,6 +307,70 @@ public class CurriculumData {
 	public void setCourseToShowDeleted(boolean courseToShowDeleted) {
 		isCourseToShowDeleted = courseToShowDeleted;
 	}
+
+	public String[] getStr_beginInterval() {
+		return str_beginInterval;
+	}
+
+	public void setStr_beginInterval(String[] str_beginInterval) {
+		this.str_beginInterval = str_beginInterval;
+	}
+
+	public String[] getStr_endInterval() {
+		return str_endInterval;
+	}
+
+	public void setStr_endInterval(String[] str_endInterval) {
+		this.str_endInterval = str_endInterval;
+	}
+
+	public int[] getCourseButtonColorsNormal() {
+		return courseButtonColorsNormal;
+	}
+
+	public void setCourseButtonColorsNormal(int[] courseButtonColorsNormal) {
+		this.courseButtonColorsNormal = courseButtonColorsNormal;
+	}
+
+	public int[] getCourseButtonColorsPressed() {
+		return courseButtonColorsPressed;
+	}
+
+	public void setCourseButtonColorsPressed(int[] courseButtonColorsPressed) {
+		this.courseButtonColorsPressed = courseButtonColorsPressed;
+	}
+
+	public int getCourseButtonColorGrayNormal() {
+		return courseButtonColorGrayNormal;
+	}
+
+	public void setCourseButtonColorGrayNormal(int courseButtonColorGrayNormal) {
+		this.courseButtonColorGrayNormal = courseButtonColorGrayNormal;
+	}
+
+	public int getCourseButtonColorGrayPressed() {
+		return courseButtonColorGrayPressed;
+	}
+
+	public void setCourseButtonColorGrayPressed(int courseButtonColorGrayPressed) {
+		this.courseButtonColorGrayPressed = courseButtonColorGrayPressed;
+	}
+
+	public int getCourseButtonCorner() {
+		return courseButtonCorner;
+	}
+
+	public void setCourseButtonCorner(int courseButtonCorner) {
+		this.courseButtonCorner = courseButtonCorner;
+	}
+
+	public int getCourseButtonMargin() {
+		return courseButtonMargin;
+	}
+
+	public void setCourseButtonMargin(int courseButtonMargin) {
+		this.courseButtonMargin = courseButtonMargin;
+	}
 	/* set and get methods END */
 
 	/**
@@ -293,6 +379,14 @@ public class CurriculumData {
 	private void initData() {
 		// 初始化周数字符串数组
 		str_week = context.getResources().getStringArray(R.array.str_week);
+		courseButtonColorsNormal = context.getResources().getIntArray(
+				R.array.colorsForCourseButtonNormal);
+		courseButtonColorsPressed = context.getResources().getIntArray(
+				R.array.colorsForCourseButtonPressed);
+		courseButtonColorGrayNormal = ContextCompat.getColor(context,
+				R.color.colorCourseButtonGrayNormal);
+		courseButtonColorGrayPressed = ContextCompat.getColor(context,
+				R.color.colorCourseButtonGrayPressed);
 		tableColumnCount = str_week.length + 1;// 设置课程表列数
 		/* 计算课程表每个Item的宽度和高度 BEGIN */
 		DisplayMetrics dm = new DisplayMetrics();
@@ -328,6 +422,13 @@ public class CurriculumData {
 			curriculumItem.setInfo("");
 			curriculumItems.add(curriculumItem);
 		}
+		// 初始化节数字符串数组
+		str_beginInterval = new String[getDay_course_count()];
+		str_endInterval = new String[getDay_course_count()];
+		for (i = 0; i < getDay_course_count(); i++) {
+			str_beginInterval[i] = "第 " + (i + 1) + " 节";
+			str_endInterval[i] = "到 " + (i + 1) + " 节";
+		}
 		// 计算课程按钮内边距数据
 		courseButtonPaddingBasic_px = DisplayUtil.dip2px(context,
 				courseButtonPaddingBasic_dp);
@@ -335,6 +436,9 @@ public class CurriculumData {
 		courseButtonPaddingTop = 2 * courseButtonPaddingBasic_px;
 		courseButtonPaddingRight = courseButtonPaddingBasic_px;
 		courseButtonPaddingBottom = 2 * courseButtonPaddingBasic_px;
+
+		courseButtonCorner = DisplayUtil.dip2px(context, courseButtonCorner_dp);
+		courseButtonMargin = DisplayUtil.dip2px(context, courseButtonMargin_dp);
 	}
 
 	/**
