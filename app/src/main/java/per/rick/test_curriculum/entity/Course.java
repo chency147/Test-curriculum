@@ -182,4 +182,8 @@ public class Course implements Cloneable {
 		}
 		return data.getStr_week()[dayWeek] + " " + this.getIntervalString();
 	}
+
+	public boolean isNeedToAttend(int week) {
+		return (weeksBinary & (1 << (week - 1))) != 0;
+	}
 }

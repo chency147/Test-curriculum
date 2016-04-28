@@ -6,13 +6,17 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +82,10 @@ public class CurriculumData {
 
 	private SharedPreferences preferences;// 共享存储对象
 	private SharedPreferences.Editor editor;// 共享存储编辑对象
+
+	private int currentWeek;// 当前周
+	private int showWeek;// 显示周
+	private Date firstDay = null;// 学期第一周的周日
 
 	/**
 	 * 构造方法（私有）
@@ -371,6 +379,30 @@ public class CurriculumData {
 	public void setCourseButtonMargin(int courseButtonMargin) {
 		this.courseButtonMargin = courseButtonMargin;
 	}
+
+	public int getCurrentWeek() {
+		return currentWeek;
+	}
+
+	public void setCurrentWeek(int currentWeek) {
+		this.currentWeek = currentWeek;
+	}
+
+	public Date getFirstDay() {
+		return firstDay;
+	}
+
+	public void setFirstDay(Date firstDay) {
+		this.firstDay = firstDay;
+	}
+
+	public int getShowWeek() {
+		return showWeek;
+	}
+
+	public void setShowWeek(int showWeek) {
+		this.showWeek = showWeek;
+	}
 	/* set and get methods END */
 
 	/**
@@ -411,6 +443,8 @@ public class CurriculumData {
 			Day day = new Day();
 			day.setDay(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
 			day.setDay_week(str_week[i]);
+			day.setMonth(cal.get(Calendar.MONTH) + 1);
+			day.setDate(cal.getTime());
 			days.add(day);
 			cal.add(Calendar.DATE, 1);
 			i++;
@@ -446,9 +480,23 @@ public class CurriculumData {
 	 */
 	public void saveData() {
 		CourseController courseController = new CourseController(context);
-		preferences = context.getSharedPreferences("rick-curriculum", Context.MODE_PRIVATE);
+		preferences = context.getSharedPreferences("rick-curriculum",
+				Context.MODE_PRIVATE);
 		editor = preferences.edit();
-		editor.putString("coursesData", courseController.coursesToJSON(courses).toString());
+		editor.putString("coursesData", courseController
+				.coursesToJSON(courses).toString());
+		editor.commit();
+	}
+
+	/**
+	 * 保存开学第一天日期
+	 */
+	public void saveFirstDay() {
+		preferences = context.getSharedPreferences("rick-curriculum",
+				Context.MODE_PRIVATE);
+		editor = preferences.edit();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		editor.putString("firstDay", sdf.format(firstDay));
 		editor.commit();
 	}
 
@@ -457,13 +505,42 @@ public class CurriculumData {
 	 */
 	public void getData() {
 		CourseController courseController = new CourseController(context);
-		preferences = context.getSharedPreferences("rick-curriculum", Context.MODE_PRIVATE);
+		preferences = context.getSharedPreferences("rick-curriculum",
+				Context.MODE_PRIVATE);
 		try {
-			JSONObject coursesJSON = new JSONObject(preferences.getString("coursesData", ""));
+			JSONObject coursesJSON = new JSONObject(
+					preferences.getString("coursesData", " "));
 			this.setCourses(courseController.jsonToCourses(coursesJSON));
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.courses = new ArrayList<Course>();
 		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String dateString =
+				preferences.getString("firstDay", null);
+		if (dateString == null) {
+			Calendar cal = Calendar.getInstance();
+			cal.setFirstDayOfWeek(Calendar.SUNDAY);// 设置周日为每周第一天
+			int fix = 1 + (-1) * cal.get(Calendar.DAY_OF_WEEK);
+			cal.add(Calendar.DATE, fix);
+			this.firstDay = cal.getTime();
+		} else {
+			try {
+				this.firstDay = sdf.parse(dateString);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		Log.v("CCY", String.valueOf(firstDay == null));
+		// 计算当前是第几周
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		long time1 = cal.getTimeInMillis();
+		cal.setTime(this.firstDay);
+		long time2 = cal.getTimeInMillis();
+		long between_days = (time1 - time2) / (1000 * 3600 * 24);
+		int between_weeks = (int) between_days / 7;
+		currentWeek = between_weeks + 1;
+		showWeek = currentWeek;
 	}
 }

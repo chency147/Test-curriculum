@@ -8,8 +8,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,6 +22,9 @@ import per.rick.test_curriculum.controller.CourseController;
 import per.rick.test_curriculum.data.CurriculumData;
 import per.rick.test_curriculum.entity.Course;
 import per.rick.test_curriculum.entity.CurriculumItem;
+import per.rick.test_curriculum.entity.Day;
+import per.rick.test_curriculum.listener.CalendarWeekChangeListener;
+import per.rick.test_curriculum.widget.CalendarWeekChangeDialog;
 import per.rick.test_curriculum.widget.CourseButton;
 
 /**
@@ -28,6 +33,7 @@ import per.rick.test_curriculum.widget.CourseButton;
  */
 public class MainActivity extends AppCompatActivity {
 
+	private TextView tv_week;// 标题文本
 	private RelativeLayout rl_course_table;// 防止课程表的相对布局
 	private GridView gv_curriculum;// 课程表容器
 	private GridView gv_date;// 课程表上方的日期显示容器
@@ -36,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 	private List<CourseButton> courseButtons;// 保存课程按钮的链表
 	DateAdapter dateAdapter;// 日期容器适配器
 	CurriculumAdapter curriculumAdapter;// 课程表容器适配器
+	CalendarWeekChangeListener calendarWeekChangeListener;// 周选择监听器
+	private int showWeek = 1;// 显示的周
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +51,11 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 		data = CurriculumData.getInstance(this);// 获取课程表数据对象
 		data.getData();// 初始化数据
+		showWeek = data.getCurrentWeek();
 		courseController = new CourseController(this);// 初始化课程操作工具对象
 		courseButtons = new ArrayList<CourseButton>();// 初始化课程按钮链表
 		this.initCurriculum();
+		this.setCalendarWeekChangeListener();
 		// 配置课程表点击事件，标记或者取消标记被点击的Item
 		gv_curriculum.setOnItemClickListener(
 				new AdapterView.OnItemClickListener() {
@@ -69,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 	 * 初始化课程表各控件
 	 */
 	private void initCurriculum() {
+		tv_week = (TextView) findViewById(R.id.tv_week);
 		gv_curriculum = (GridView) findViewById(R.id.gv_curriculum);
 		gv_date = (GridView) findViewById(R.id.gv_date);
 		dateAdapter = new DateAdapter(this, data.getDays(), data.getMonth());
@@ -76,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
 		gv_date.setAdapter(dateAdapter);
 		gv_curriculum.setAdapter(curriculumAdapter);
 		rl_course_table = (RelativeLayout) findViewById(R.id.rl_course_table);
+		tv_week.setText(data.getCurrentWeek() == showWeek ?
+				("第" + showWeek + "周 ▾") :
+				("第" + showWeek + "周(非本周) ▾"));
 	}
 
 	/**
@@ -166,6 +180,16 @@ public class MainActivity extends AppCompatActivity {
 			data.setCourseToShowDeleted(false);
 			needSave = true;
 		}
+		if (data.getShowWeek() != this.showWeek) {
+			showWeek = data.getShowWeek();
+			tv_week.setText(data.getCurrentWeek() == showWeek ?
+					("第" + showWeek + "周 ▾") :
+					("第" + showWeek + "周(非本周) ▾"));
+			refreshDayRow(showWeek);
+			for (CourseButton cb : courseButtons) {
+				courseController.refreshCourseButtonState(cb);
+			}
+		}
 		// 重新保存课程信息
 		if (needSave) {
 			data.saveData();
@@ -178,5 +202,87 @@ public class MainActivity extends AppCompatActivity {
 	 */
 	public void back(View view) {
 		onBackPressed();
+	}
+
+	/**
+	 * 弹出显示周选择对话框
+	 *
+	 * @param view
+	 */
+	public void chooseWeek(View view) {
+		CalendarWeekChangeDialog.Builder builder =
+				new CalendarWeekChangeDialog.Builder(this, "修改显示周",
+						getWeekStringArray(data.getCurrentWeek()), showWeek);
+		builder.setCalendarWeekChangeListener(this.calendarWeekChangeListener);
+		builder.create().show();
+	}
+
+	/**
+	 * 获得周对话框周选择文本字符串数组
+	 *
+	 * @param currentWeek 当前显示的周
+	 * @return 字符串数组
+	 */
+	private String[] getWeekStringArray(int currentWeek) {
+		String[] weeks = new String[data.getMaxWeekCount()];
+		int i;
+		for (i = 0; i < data.getMaxWeekCount(); i++) {
+			weeks[i] = "第 " + (i + 1) + " 周";
+			if (i + 1 == currentWeek) {
+				weeks[i] = weeks[i] + "（本周）";
+			}
+		}
+		return weeks;
+	}
+
+	/**
+	 * 设置日历周选择对话框监听器
+	 */
+	private void setCalendarWeekChangeListener() {
+		calendarWeekChangeListener = new CalendarWeekChangeListener() {
+			@Override
+			public void doChangeCalendarWeek(int week) {
+				MainActivity.this.tv_week.setText(
+						data.getCurrentWeek() == week ?
+								("第" + week + "周 ▾") :
+								("第" + week + "周(非本周) ▾"));
+				MainActivity.this.showWeek = week;
+				data.setShowWeek(week);
+				refreshDayRow(week);
+				for (CourseButton cb : courseButtons) {
+					courseController.refreshCourseButtonState(cb);
+				}
+			}
+		};
+	}
+
+	/**
+	 * 刷新课程按钮外观
+	 *
+	 * @param week
+	 */
+	private void refreshDayRow(int week) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(data.getFirstDay());
+		cal.add(Calendar.DATE, 7 * (week - 1));
+		dateAdapter.setMonth(String.valueOf((cal.get(Calendar.MONTH) + 1))
+				+ "月");
+		for (Day day : data.getDays()) {
+			day.setDay(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
+			day.setMonth(cal.get(Calendar.MONTH) + 1);
+			day.setDate(cal.getTime());
+			cal.add(Calendar.DATE, 1);
+		}
+		dateAdapter.notifyDataSetChanged();
+	}
+
+	/**
+	 * 开启设置页面
+	 */
+	public void startSettingActivity(View view) {
+		ComponentName comp = new ComponentName(this, SettingActivity.class);
+		Intent intent = new Intent();
+		intent.setComponent(comp);
+		startActivity(intent);
 	}
 }

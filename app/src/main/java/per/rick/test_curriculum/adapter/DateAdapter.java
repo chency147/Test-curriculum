@@ -7,11 +7,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import per.rick.test_curriculum.adapter.holder.DayViewHolder;
 import per.rick.test_curriculum.R;
 import per.rick.test_curriculum.entity.Day;
+import per.rick.test_curriculum.tool.TimeUtil;
 
 /**
  * 日期表格适配器
@@ -70,8 +73,24 @@ public class DateAdapter extends BaseAdapter {
 			viewHolder.getTv_week_day().setText("");
 		} else {
 			viewHolder.getTv_day().setText(days.get(position - 1).getDay());
-			viewHolder.getTv_week_day().setText(days.get(position - 1).getDay_week());
+			viewHolder.getTv_week_day().setText(days.get(position - 1)
+					.getDay_week());
+			if (TimeUtil.isSameDayOfMillis((new Date()).getTime(),
+					days.get(position - 1).getDate().getTime())) {
+				convertView.setBackgroundResource(R.drawable.item_header_hl_bg);
+			} else {
+				convertView.setBackgroundResource(R.drawable.item_header_bg);
+			}
 		}
 		return convertView;
+	}
+
+	/* set and get methods */
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
 	}
 }

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	tools:context="per.rick.test_curriculum.activity.SettingActivity">
+	<!-- 顶部栏 BEGIN-->
+	<RelativeLayout
+		android:id="@+id/rl_title"
+		android:layout_width="match_parent"
+		android:layout_height="50dp"
+		android:background="@color/colorPrimary">
+
+		<ImageButton
+			android:id="@+id/ib_back"
+			android:layout_width="32dp"
+			android:layout_height="32dp"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentStart="true"
+			android:layout_centerVertical="true"
+			android:layout_marginLeft="@dimen/activity_horizontal_margin"
+			android:background="@drawable/ic_arrow_back_blue_600_48dp"
+			android:onClick="back"/>
+
+		<TextView
+			android:id="@+id/tv_title"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_centerHorizontal="true"
+			android:layout_marginBottom="8dp"
+			android:layout_marginTop="8dp"
+			android:gravity="center"
+			android:onClick="chooseWeek"
+			android:text="@string/str_setting"
+			android:textColor="@android:color/black"
+			android:textSize="20dp"/>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1px"
+			android:layout_alignParentBottom="true"
+			android:background="@color/colorSplit"/>
+	</RelativeLayout>
+	<!-- 顶部栏 END -->
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/colorMainBackground"
+		android:orientation="vertical"
+		android:paddingBottom="@dimen/activity_vertical_margin"
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin"
+		android:paddingTop="@dimen/activity_vertical_margin">
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_margin="4dp"
+			android:text="@string/str_basic_setting"
+			android:textColor="@color/colorMediumTitle"
+			/>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@color/colorMediumTitle"/>
+
+		<TableLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_marginTop="4dp"
+			android:divider="@drawable/shape_divider"
+			android:showDividers="middle|end"
+			>
+
+			<TableRow
+				android:onClick="chooseCalendarWeek"
+				>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:height="50dp"
+					android:gravity="center_vertical"
+					android:text="@string/str_current_week"
+					android:textColor="@android:color/black"
+					android:textSize="16sp"
+					/>
+
+				<TextView
+					android:id="@+id/tv_calendar_week"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:height="50dp"
+					android:gravity="right|center_vertical"
+					android:textColor="@color/colorEditText"
+					android:textSize="16sp"
+					/>
+			</TableRow>
+
+		</TableLayout>
+	</LinearLayout>
+</LinearLayout>

@@ -31,6 +31,7 @@
 			android:layout_marginBottom="8dp"
 			android:layout_marginTop="8dp"
 			android:gravity="center"
+			android:onClick="chooseWeek"
 			android:text="第1周  ▾"
 			android:textColor="@color/colorTitleItemNormal"
 			android:textSize="20dp"/>
@@ -45,6 +46,7 @@
 			android:layout_marginRight="@dimen/activity_horizontal_margin"
 			android:layout_marginTop="8dp"
 			android:gravity="center"
+			android:onClick="startSettingActivity"
 			android:text="@string/str_setting"
 			android:textColor="@color/colorTitleItemNormal"
 			android:textSize="18dp"

@@ -7,6 +7,7 @@
 	<color name="colorSplit">#c2c2c2</color>
 	<color name="colorCurriculumSplit">#7c8aa1</color>
 	<color name="colorCurriculumHeaderBg">#64ffffff</color>
+	<color name="colorCurriculumHeaderHighLightBg">#40777794</color>
 	<color name="colorCurriculumHeaderText">#0a2040</color>
 	<color name="colorMediumTitle">#176cb7</color>
 	<color name="colorEditText">#616161</color>
@@ -16,8 +17,8 @@
 	<color name="colorDeleteButtonNormal">#f43b3b</color>
 	<color name="colorDeleteButtonPressed">#a91313</color>
 	<color name="colorCurriculumSelected">#78ffffff</color>
-	<color name="colorCourseButtonGrayNormal">#c8939393</color>
-	<color name="colorCourseButtonGrayPressed">#c82e2e2e</color>
+	<color name="colorCourseButtonGrayNormal">#64939393</color>
+	<color name="colorCourseButtonGrayPressed">#642e2e2e</color>
 	<array name="colorsForCourseButtonNormal">
 		<item>#b2ff0000</item>
 		<item>#c8ff00d5</item>

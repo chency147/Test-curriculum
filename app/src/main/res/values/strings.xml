@@ -10,6 +10,7 @@
 		<item>周六</item>
 	</array>
 	<string name="str_setting">设置</string>
+	<string name="str_basic_setting">基础设置</string>
 	<string name="str_submit">提交</string>
 	<string name="str_copy_curriculum">复制课表</string>
 	<string name="str_add_course">添加课程</string>
@@ -26,4 +27,7 @@
 	<string name="str_delete_course">删除课程</string>
 	<string name="str_weeks_choose">周数选择</string>
 	<string name="str_interval_choose">节数选择</string>
+	<string name="str_show_week_change">修改显示周</string>
+	<string name="str_current_week_change">修改当前周</string>
+	<string name="str_current_week">当前周数</string>
 </resources>

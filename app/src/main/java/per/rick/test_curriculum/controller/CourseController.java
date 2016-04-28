@@ -106,12 +106,13 @@ public class CourseController {
 				data.getCourseButtonPaddingRight(),
 				data.getCourseButtonPaddingBottom()
 		);
+		cb.setSelected(!course.isNeedToAttend(data.getShowWeek()));
 		// 设置按钮背景
 		Drawable drawable = this.getCourseButtonBackground(
 				getIdCode(course.getName()), data.getCourseButtonCorner(),
 				data.getCourseButtonCorner(),
 				data.getCourseButtonCorner(),
-				data.getCourseButtonCorner());
+				data.getCourseButtonCorner(), cb.isSelected());
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			cb.setBackground(drawable);
 		} else {
@@ -129,6 +130,7 @@ public class CourseController {
 			}
 		});
 		course.setCourseButton(cb);
+		cb.setCourse(course);
 		courseButtons.add(cb);
 		layout.addView(cb);
 		return true;
@@ -262,7 +264,7 @@ public class CourseController {
 		for (i = 0; i < temp.length; i++) {
 			idCode += temp[i];
 		}
-		return idCode;
+		return Math.abs(idCode);
 	}
 
 	/**
@@ -278,7 +280,8 @@ public class CourseController {
 	public Drawable getCourseButtonBackground(int idCode, float cTopLeft,
 											  float cTopRight,
 											  float cBottomLeft,
-											  float cBottomRight) {
+											  float cBottomRight,
+											  boolean isNeedToAttend) {
 		float outRect[] = new float[]{cTopLeft, cTopLeft, cTopRight,
 				cTopRight, cBottomRight, cBottomRight,
 				cBottomLeft, cBottomLeft};
@@ -289,13 +292,41 @@ public class CourseController {
 		ShapeDrawable pressedDrawable = new ShapeDrawable(rectShape);
 		ShapeDrawable normalDrawable = new ShapeDrawable(rectShape);
 		// 设置背景颜色
-		pressedDrawable.getPaint().setColor(data.getCourseButtonColorsPressed()[
-				idCode % data.getCourseButtonColorsPressed().length]);
-		normalDrawable.getPaint().setColor(data.getCourseButtonColorsNormal()[
-				idCode % data.getCourseButtonColorsNormal().length]);
+		if (isNeedToAttend) {
+			pressedDrawable.getPaint().setColor(
+					data.getCourseButtonColorGrayPressed());
+			normalDrawable.getPaint().setColor(
+					data.getCourseButtonColorGrayNormal());
+		} else {
+			pressedDrawable.getPaint().setColor(
+					data.getCourseButtonColorsPressed()[
+							idCode % data.getCourseButtonColorsPressed()
+									.length]);
+			normalDrawable.getPaint().setColor(
+					data.getCourseButtonColorsNormal()[
+							idCode % data.getCourseButtonColorsNormal()
+									.length]);
+		}
 		// 添加状态画布
 		drawable.addState(pressState, pressedDrawable);
 		drawable.addState(normalState, normalDrawable);
 		return drawable;
+	}
+
+	public void refreshCourseButtonState(CourseButton courseButton) {
+		courseButton.setSelected(!courseButton.getCourse()
+				.isNeedToAttend(data.getShowWeek()));
+		// 设置按钮背景
+		Drawable drawable = this.getCourseButtonBackground(
+				getIdCode(courseButton.getCourse()
+						.getName()), data.getCourseButtonCorner(),
+				data.getCourseButtonCorner(),
+				data.getCourseButtonCorner(),
+				data.getCourseButtonCorner(), courseButton.isSelected());
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			courseButton.setBackground(drawable);
+		} else {
+			courseButton.setBackgroundDrawable(drawable);
+		}
 	}
 }
